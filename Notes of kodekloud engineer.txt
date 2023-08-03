@@ -1,0 +1,775 @@
+KODEKLOUD ENGINEER TASKS:
+****************************************
+TASK 1
+Q]give file permission (read and executable)
+Ans: login to user ,use ssh @ username and password then give chmod 
+****************************************
+TASK 2:
+Create a Linux User with non-interactive shell:
+
+The System admin team of xFusionCorp Industries has installed a backup agent tool on all app servers. As per the tool's requirements they need to create a user with a non-interactive shell.
+Therefore, create a user named yousuf with a non-interactive shell on the App Server 2
+Ans:
+      login to ssh steve@stapp02
+	enter password from document
+	sudo su -
+	useradd yousuf -s /sbin/nologin
+	to verify use cat /etc/passwd | grep -i yousuf
+[A non interactive shell is a shell which refuses login to the particular user]
+How do I create a user without interactive shell in Linux?
+So the command would be -> ssh [email protected] and then you ll be prompted to enter the app01 user's password. You enter and log in app01 server. There you create a user with non-interactive shell like sudo adduser username -s /sbin/nologin.
+****************************************
+TASK 3:
+Linux TimeZones Setting:
+
+During the daily standup, it was pointed out that the timezone across Nautilus Application Servers in Stratos Datacenter doesn't match with that of the local datacenter's timezone, which is Asia/Kuching.
+Correct the mismatch.
+Ans:
+login to all servers and go sudo ,perform the below commands
+
+    1  timedatectl
+    2  timedatectl set-timezone Asia/Kuching
+    3  timedatectl
+***************************************
+TASK 4:
+Linux Run Levels:
+
+New tools have been installed on the app server in Stratos Datacenter. Some of these tools can only be managed from the graphical user interface. Therefore, there are requirements for these app servers.
+On all App servers in Stratos Datacenter change the default runlevel so that they can boot in GUI (graphical user interface) by default. Please do not try to reboot these servers
+
+    1  systemctl get-default
+    2  systemctl status graphical.target
+    3  systemctl start graphical.target
+    4  systemctl status graphical.target
+    5  systemctl enable graphical.target
+    6  systemctl get-default
+    7  systemctl set-default  graphical.target
+    8  systemctl get-default
+    9  history
+
+**************************************
+TASK 5:
+Linux Postfix Troubleshooting:
+
+Some users of the monitoring app have reported issues with xFusionCorp Industries mail server. They have a mail server in Stork DC where they are using postfix mail transfer agent. Postfix service seems to fail. Try to identify the root cause and fix it.
+ANS:
+	ssh groot@stmail01  [log into mail server as per task]
+	sudo su -
+	systemctl status postfix
+	systemctl status postfix -l
+	cat /etc/postfix/main.cf |grep inet_interface
+	[edit main.cf and comment out inet_interface]
+	vi /etc/postfix/main.cf
+	cat /etc/postfix/main.cf |grep inet_interface
+	systemctl start postfix
+	systemctl status postfix
+	telnet localhost 25
+
+**************************************
+TASK 6:
+Linux String Substitute (sed):
+
+There is some data on Nautilus App Server 3 in Stratos DC. Data needs to be altered in several of the files. On Nautilus App Server 3, alter the /home/BSD.txt file as per details given below:
+
+a. Delete all lines containing word following and save results in /home/BSD_DELETE.txt file. (Please be aware of case sensitivity)
+
+b. Replace all occurrence of word from to is and save results in /home/BSD_REPLACE.txt file.
+
+    Note: Let's say you are asked to replace word to with from. In that case, make sure not to alter any words containing this string; for example upto, contributor etc.
+    1  cat /home/BSD.txt |grep following
+    2  sed -i '/following/d' /home/BSD.txt > /home/BSD_DELETE.txt
+    3  cat /home/BSD.txt |grep following
+    4  cat /home/BSD.txt |grep from
+    5  sed -i 's/from/is/g' /home/BSD.txt > /home/BSD_REPLACE.txt
+    6  cat /home/BSD.txt |grep from
+    7  history
+
+
+  cat /home/BSd.txt |grep code
+    2  cat /home/BSD.txt |grep code
+    3  cat /home/BSD.txt 
+    4  cat /home/BSD.txt |grep code
+    5  sed -i '/code/d' /home/BSD.txt > /home/BSD_DELETE.txt
+    6  cat /home/BSD.txt |grep code
+    7  cat /home/BSD.txt
+    8  history
+    9  sed -i 's/the/for/g' /home/BSD.txt > /home/BSD_REPLACE.txt
+    10  cat /home/BSD.txt |grep the
+    11  cat /home/BSD.txt |grep for
+    12  history
+
+***************************************
+TASK 7:
+LINUX USER WITHOUT HOME:
+
+The system admins team of xFusionCorp Industries has set up a new tool on all app servers, as they have a requirement to create a service user account that will be used by that tool. They are finished with all apps except for App Server 1 in Stratos Datacenter.
+Create a user named siva in App Server 1 without a home directory.
+
+    1  id siva
+    2  useradd -M siva
+    3  id siva
+    4  cat /etc/passwd |grep siva
+***************************************
+TASK 8:
+LINUX STRING SUBSTITUTE:
+
+The backup server in the Stratos DC contains several template XML files used by the Nautilus application. However, these template XML files must be populated with valid data before they can be used. One of the daily tasks of a system admin working in the xFusionCorp industries is to apply string and file manipulation commands!
+Replace all occurances of the string About to Torpedo on the XML file /root/nautilus.xml located in the backup server.
+ANS: 
+    1  cat /root/nautilus.xml | grep About
+    2  sed -i 's/About/Torpedo/g' /root/nautilus.xml 
+    3  cat /root/nautilus.xml | grep About
+    4  cat /root/nautilus.xml | grep Torpedo
+    5  history
+*******************************************
+TASK 9:
+Mariadb troubleshooting:
+There is a critical issue going on with the Nautilus application in Stratos DC. The production support team identified that the application is unable to connect to the database. After digging into the issue, the team found that mariadb service is down on the database server.
+Look into the issue and fix the same.
+
+	systemctl status mariadb
+	systemctl enable mariadb
+	systemctl start mariadb
+	journalctl -xe -u mariadb
+	cd /var/lib
+	ls -la
+	chwon -R mysql:mysql mysql
+	systemctl start mariadb
+	systemctl status mariadb
+******************************************
+TASK 10:
+Linux SSH Authentication: [Setting up passwordless connection]
+The system admins team of xFusionCorp Industries has set up some scripts on jump host that run on regular intervals and perform operations on all app servers in Stratos Datacenter. To make these scripts work properly we need to make sure the thor user on jump host has password-less SSH access to all app servers through their respective sudo users (i.e tony for app server 1). Based on the requirements, perform the following:
+Set up a password-less authentication from user thor on jump host to all app servers through their respective sudo users.
+
+    1  whoami
+    2  ssh-keygen -t rsa
+    3  ssh-copy-id tony@stapp01
+    4  ssh tony@stapp01
+    5  whoami 
+    6  ssh-copy-id steve@stapp02
+    7  ssh steve@stapp02
+    8  whoami
+    9  ssh-copy-id banner@stapp03
+    10  ssh banner@stapp03
+    11  whoami
+***************************************
+TASK 11:
+Disable root login:
+After doing some security audits of servers, xFusionCorp Industries security team has implemented some new security policies. One of them is to disable direct root login through SSH.
+Disable direct SSH root login on all app servers in Stratos Datacenter.
+login to all app servers and change the permitroot login frm yes to no.
+
+     systemctl status sshd
+     vi /etc/ssh/sshd_config
+     remove permit root login permission
+     cat /etc/ssh/sshd_config |grep Permit
+     systemctl restart sshd
+     systemctl status sshd
+     history
+**************************************
+TASK 12:
+Linux Collaborative Directories:
+The Nautilus team doesn't want its data to be accessed by any of the other groups/teams due to security reasons and want their data to be strictly accessed by the sysops group of the team.
+Setup a collaborative directory /sysops/data on Nautilus App 3 server in Stratos Datacenter.
+
+The directory should be group owned by the group sysops and the group should own the files inside the directory. The directory should be read/write/execute to the group owners, and others should not have any access.
+
+    1  mkdir -p /sysops/data
+    2  ls -la /sysops/data/
+    3  chown -R root:sysops /sysops/data/
+    4  ls -ld /sysops/data/
+    5  chmod 770 /sysops/data/
+    6  ls -ld /sysops/data/
+    7  history
+*************************************
+TASK 13:
+Linux Remote Copy:
+One of the Nautilus developers has copied confidential data on the jump host in Stratos DC. That data must be copied to one of the app servers. Because developers do not have access to app servers, they asked the system admins team to accomplish the task for them.
+Copy /tmp/nautilus.txt.gpg file from jump server to App Server 1 at location /home/code.
+	cd /tmp
+	ls -la
+	scp nautilus.txt.gpg tony@stapp01:/home/code
+	ssh tony@stapp01
+	cd /home/code
+	ls -la [to crosscheck]
+**************************************
+TASK 14:
+DNS Troubleshooting:
+The system admins team of xFusionCorp Industries has noticed intermittent issues with DNS resolution in several apps . App Server 2 in Stratos Datacenter is having some DNS resolution issues, so we want to add some additional DNS nameservers on this server.
+As a temporary fix we have decided to go with Google public DNS (ipv4). Please make appropriate changes on this server.
+    1  cat /etc/resolv.conf 
+    2  ping google.com
+    3  vi /etc/resolv.conf 
+    4  cat /etc/resolv.conf 
+    5  history
+
+***************************************
+TASK 15:
+LINUX USER FILE:
+There was some users data copied on Nautilus App Server 3 at /home/usersdata location by the Nautilus production support team in Stratos DC. Later they found that they mistakenly mixed up different user data there. Now they want to filter out some user data and copy it to another location. Find the details below:
+On App Server 3 find all files (not directories) owned by user mark inside /home/usersdata directory and copy them all while keeping the folder structure (preserve the directories path) to /beta directory.
+     cd /home/usersdata
+     find . -user mark
+     find . -user mark |cpio -pdm /beta
+     cd /beta/
+     ls
+     history
+
+[check find command and cpio command ]
+
+************************************
+TASK 16:
+The Nautilus system admins team has prepared scripts to automate several day-to-day tasks. They want them to be deployed on all app servers in Stratos DC on a set schedule. Before that they need to test similar functionality with a sample cron job. Therefore, perform the steps below:
+a. Install cronie package on all Nautilus app servers and start crond service.
+
+b. Add a cron */5 * * * * echo hello > /tmp/cron_text for root user.
+
+
+    1  yum install cronie && systemctl start crond.service && systemctl status crond.service
+    2  crontab -u root -l
+    3  crontab -e
+        then  */5 * * * * echo hello > /tmp/cron_text 
+    4  crontab -u root -l
+    5  watch -n 5 ls -l /tmp
+    6  ll /tmp/
+    7  history
+    repeat these steps in all app servers.
+
+***********************************
+TASK 17:
+
+A developer yousuf has been assigned Nautilus project temporarily as a backup resource. As a temporary resource for this project, we need a temporary user for yousuf. It’s a good idea to create a user with a set expiration date so that the user won't be able to access servers beyond that point.
+Therefore, create a user named yousuf on the App Server 2. Set expiry date to 2021-12-07 in Stratos Datacenter. Make sure the user is created as per standard and is in lowercase.
+	
+    1  useradd -e 2021-12-07 yousuf
+    2  usermod -l yousuf [this is to check only]
+    3  chage -l yousuf [this ---------]
+    4  history
+
+**************************************
+TASK 18:
+
+The system admin team of xFusionCorp Industries has noticed an issue with some servers in Stratos Datacenter where some of the servers are not in sync w.r.t time. Because of this, several application functionalities have been impacted. To fix this issue the team has started using common/standard NTP servers. They are finished with most of the servers except App Server 2. Therefore, perform the following tasks on this server:
+
+Install and configure NTP server on App Server 2.
+
+Add NTP server 1.my.pool.ntp.org in NTP configuration on App Server 2.
+
+Please do not try to start/restart/stop ntp service, as we already have a restart for this service scheduled for tonight and we don't want these changes to be applied right now.
+
+	 server 1.my.pool.ntp.org
+    1  rpm -qa |grep ntp
+    2  yum install -y ntp
+    3  rpm -qa |grep ntp
+    4  vi /etc/ntp.conf
+    5  server 1.my.pool.ntp.org
+    6  history
+    7  systemctl enable ntpd;systemctl start ntpd;systemctl status ntpd
+    8  ntpstat
+    9  history
+
+********************************************
+TASK 19:
+
+Selinux Installation:
+The xFusionCorp Industries security team recently did a security audit of their infrastructure and came up with ideas to improve the application and server security. They decided to use SElinux for an additional security layer. They are still planning how they will implement it; however, they have decided to start testing with app servers, so based on the recommendations they have the following requirements:
+Install the required packages of SElinux on App server 1 in Stratos Datacenter and disable it permanently for now; it will be enabled after making some required configuration changes on this host. Don't worry about rebooting the server as there is already a reboot scheduled for tonight's maintenance window. Also ignore the status of SElinux command line right now; the final status after reboot should be disabled.
+	1 yum install selinux* -y
+      2 vi /etc/selinux/config
+      3 history
+
+*******************************************
+TASK 20:
+
+LINUX BANNER:
+During the monthly compliance meeting, it was pointed out that several servers in the Stratos DC do not have a valid banner. The security team has provided serveral approved templates which should be applied to the servers to maintain compliance. These will be displayed to the user upon a successful login.
+Update the message of the day on all application and db servers for Nautilus. Make use of the approved template located at /home/thor/nautilus_banner on jump host
+	
+	login to tony
+	# in new terminal follow the command
+      2 scp -r /home/thor/nautilus_banner tony@stapp01:/tmp
+      # in tony follow the command
+	3  cp /tmp/nautilus_banner /etc/motd
+      4  cat /etc/motd
+      repeat in all servers
+      [sudo yum install openssh-clients in db01 thn follow above steps]
+
+******************************************
+TASK 21:
+INSTALL A PACKAGE:
+As per new application requirements shared by the Nautilus project development team, serveral new packages need to be installed on all app servers in Stratos Datacenter. Most of them are completed except for samba.
+Therefore, install the samba package on all app-servers.
+	login to all app servers and install samba package
+	 yum install samba -y
+
+******************************************
+TASK 22:
+
+LINUX FIND COMMAND:
+
+During a routine security audit, the team identified an issue on the Nautilus App Server. Some malicious content was identified within the website code. After digging into the issue they found that there might be more infected files. Before doing a cleanup they would like to find all similar files and copy them to a safe location for further investigation. Accomplish the task as per the following requirements:
+
+a. On App Server 2 at location /var/www/html/ecommerce find out all files (not directories) having .css extension.
+
+b. Copy all those files along with their parent directory structure to location /ecommerce on same server.
+
+c. Please make sure not to copy the entire /var/www/html/ecommerce directory content
+
+    1	 ll /ecommerce
+    2  find /var/www/html/ecommerce -type f -name '*.css'
+    3  find /var/www/html/ecommerce -type f -name '*.css'|wc -l
+    4  find /var/www/html/ecommerce -type f -name '*.css' -exec cp --parents {} /ecommerce \;
+    5  ll /ecommerce/
+
+
+************************************************
+
+TASK 23:
+WEB SERVER SECURITY:
+During a recent security audit, the application security team of xFusionCorp Industries found security issues with the Apache web server on Nautilus App Server 3 server in Stratos DC. They have listed several security issues that need to be fixed on this server. Please apply the security settings below:
+a. On Nautilus App Server 3 it was identified that the Apache web server is exposing the version number. Ensure this server has the appropriate settings to hide the version number of the Apache web server.
+
+b. There is a website hosted under /var/www/html/ecommerce on App Server 3. It was detected that the directory /ecommerce lists all of its contents while browsing the URL. Disable the directory browser listing in Apache config.
+
+c. Also make sure to restart the Apache service after making the changes.
+
+
+	systemctl status httpd
+     vi /etc/httpd/conf/httpd.conf
+		add ServerSignature Off
+		    ServerTokens Prod
+     cat /etc/httpd/conf/httpd.conf |grep -i token
+     cat /etc/httpd/conf/httpd.conf |grep -i sign
+     systemctl start httpd
+     systemctl status httpd
+     curl -I http://stapp03:8080
+     curl -I http://stapp03:8080/ecommerce
+     history
+
+**********************************************
+
+TASK 24:
+
+Apache Redirects:
+
+Q]The Nautilus devops team got some requirements related to some Apache config changes. They need to setup some redirects for some URLs. There might be some more changes need to be done. Below you can find more details regarding that:
+
+httpd is already installed on app server 2. Configure Apache to listen on port 5002.
+
+Configure Apache to add some redirects as mentioned below:
+
+a.) Redirect http://stapp02.stratos.xfusioncorp.com:<Port>/ to http://www.stapp02.stratos.xfusioncorp.com:<Port>/ i.e non www to www. This must be a permanent redirect i.e 301
+
+b.) Redirect http://www.stapp02.stratos.xfusioncorp.com:<Port>/blog/ to http://www.stapp02.stratos.xfusioncorp.com:<Port>/news/. This must be a temporary redirect i.e 302.
+
+	
+
+[main.conf file
+<VirtualHost *:5002>
+ServerName stapp02.stratos.xfusioncorp.com
+Redirect 301 / http://www.stapp02.stratos.xfusioncorp.com:5002/
+</VirtualHost>
+
+<VirtualHost *:5002>
+ServerName www.stapp02.stratos.xfusioncorp.com:5002/blog/
+Redirect 302 /blog/ http://www.stapp02.stratos.xfusioncorp.com:5002/news/ ]
+
+   rpm -qa |grep httpd
+   46  cat /etc/httpd/conf/httpd.conf |grep Listen
+   47  cat /etc/httpd/conf/httpd.conf |grep redirect
+   49  vi /etc/httpd/conf/httpd.conf [change port here to given port no]
+   50  cat /etc/httpd/conf/httpd.conf |grep Listen  [to cross check]
+   51  ll /etc/httpd/conf.d/
+   52  vi /etc/httpd/conf.d//main.conf [create main.conf for redirect in /etc/httpd/conf.d and paste the above]
+   53  cat /etc/httpd/conf.d//main.conf
+   54	systemctl restart httpd
+   55	systemctl status httpd
+   56  curl http://stapp02.stratos.xfusioncorp.com:6100
+   57  curl http://stapp02.stratos.xfusioncorp.com:6100/blog/
+   58  history
+
+*****************************************
+TASK 25:
+
+The system admins team of xFusionCorp Industries needs to deploy a new application on App Server 3 in Stratos Datacenter. They have some pre-requites to get ready that server for application deployment. Prepare the server as per requirements shared below:
+
+
+
+Install and configure nginx on App Server 3.
+
+On App Server 3 there is a self signed SSL certificate and key present at location /tmp/nautilus.crt and /tmp/nautilus.key. Move them to some appropriate location and deploy the same in Nginx.
+
+Create an index.html file with content Welcome! under Nginx document root.
+
+For final testing try to access the App Server 3 link (either hostname or IP) from jump host using curl command. For example curl -Ik https://<app-server-ip>/.
+
+	1  clear
+    2  yum install epel-release
+    3  yum install nginx -y
+    4  cp /tmp/nautilus.crt /etc/pki/
+    5  cp /tmp/nautilus.crt /etc/pki/CA/
+    6  cp /tmp/nautilus.crt /etc/pki/CA/certs/
+    7  cp /tmp/nautilus.key /etc/pki/CA/private/
+    8  vi /etc/nginx/nginx.conf  [give ip address and correct the path refer ss]
+    9  rm /usr/share/nginx/html/index.html
+   10  vi /usr/share/nginx/html/index.html   [Welcome!]
+   11  systemctl enable nginx --now
+   12  curl -Ik https://stapp03/ 
+   13  history
+
+****************************************************************
+TASK 26:
+
+Application Security:
+
+Q]We have a backup management application UI hosted on Nautilus's backup server in Stratos DC. That backup management application code is deployed under Apache on the backup server itself, and Nginx is running as a reverse proxy on the same server. Apache and Nginx ports are 6200 and 8092, respectively. We have iptables firewall installed on this server. Make the appropriate changes to fulfill the requirements mentioned below:
+We want to open all incoming connections to Nginx's port and block all incoming connections to Apache's port. Also make sure rules are permanent.
+
+	1  cat /etc/sysconfig/iptables
+    2  iptables -A INPUT -p tcp --dport 8092 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+    3  iptables -A INPUT -p tcp --dport 6200 -m conntrack --ctstate NEW -j REJECT
+    4  service iptables save
+    5  systemctl restart iptables
+    6  systemctl status iptables
+    7  cat /etc/sysconfig/iptables
+    8  iptables -L --line-numbers
+    9  history
+		telnet stbkp01 8092
+    3  telnet stbkp01 6200
+
+******************************************************
+TASK 27:
+Linux GPG Encryption:
+
+Q]We have confidential data that needs to be transferred to a remote location, so we need to encrypt that data.We also need to decrypt data we received from a remote location in order to understand its content.
+
+On storage server in Stratos Datacenter we have private and public keys stored /home/*_key.asc. Use those keys to perform the following actions.
+
+Encrypt /home/encrypt_me.txt to /home/encrypted_me.asc.
+
+Decrypt /home/decrypt_me.asc to /home/decrypted_me.txt. (Passphrase for decryption and encryption is kodekloud).
+
+	login to Datacenter
+	cd /home/
+	ll                 [in this path youll get all files along with keys]
+	   5  gpg --import public_key.asc 
+    6  gpg --import private_key.asc 
+    7  gpg --list-keys
+    8  gpg --list-secret-keys
+    9  clear
+   10  gpg --encrypt -r kodekloud@kodekloud.com --armor < encrypt_me.txt -o encrypt_me.asc
+   11  ll
+   12  gpg --decrypt decrypt_me.asc > decrypt_me.txt
+   13  ll
+   14  cat decrypted_me.txt
+   15  cat decrypt_me.asc
+   16  cat encrypt_me.txt
+   17  cat encrypt_me.asc
+
+[- '/home/encrypted_me.asc' doesn't exist on ststor01
+ERROR test-linux-pgp.py - AssertionError: - '/home/encrypted_me.asc' doesn't ...]
+
+1  clear
+    2  cd /home/
+    3  ll
+    4  gpg --import public_key.asc
+    5  gpg --import private_key.asc
+    6  gpg --list-keys
+    7  gpg --list-secret-keys
+    8  gpg --encrypt -r kodekloud@kodekloud.com --armor < encrypt_me.txt  -o encrypted_me.asc
+    9  gpg --decrypt decrypt_me.asc > decrypted_me.txt
+   10  ll
+   11  cat decrypted_me.txt
+   12  cat decrypt_me.asc
+   13   cat encrypt_me.txt
+   14  cat encrypted_me.asc
+   15  history
+
+
+**************************************************************
+
+TASK 28:
+
+Q]he Nautilus production support team and security team had a meeting last month in which they decided to use local yum repositories for maintaing packages needed for their servers. For now they have decided to configure a local yum repo on Nautilus Backup Server. This is one of the pending items from last month, so please configure a local yum repository on Nautilus Backup Server as per details given below.
+a. We have some packages already present at location /packages/downloaded_rpms/ on Nautilus Backup Server.
+b. Create a yum repo named local_yum and make sure to set Repository ID to local_yum. Configure it to use package's location /packages/downloaded_rpms/.
+c. Install package samba from this newly created repo.
+
+    1  clear
+    2  yum repolist   
+    3  vi /etc/yum.repos.d/local_yum.repo
+    4  cat /etc/yum.repos.d/local_yum.repo
+    5  yum repolist   
+    6  ll //packages/downloaded_rpms/
+    7  clear
+    8  cd /etc/yum.repos.d/
+    9  ll
+   10  vi yum_local
+   11  vi local_yum
+   12  ll
+   13  yum repolist
+   14  mv local_yum local_yum.repo
+   15  ll
+   16  yum repolist
+   17  yum install samba
+   18  yum repolist
+   19  history
+- 'samba' package was not installed from 'local_yum' yum repository on Backup Server
+FAILED test_yum.py::test_yum - AssertionError: - 'samba' package was not inst...
+
+- 'vim-enhanced' is not installed on Backup Server
+FAILED test_yum.py::test_yum - AssertionError: - 'vim-enhanced' is not instal...
+
+[yum_local]
+name=yum_local
+baseurl=file:///packages/downloaded_rpms/
+enabled = 1
+gpgcheck = 0
+repo_gpgcheck = 0
+
+
+    1  ls
+    2  yum repolist
+    3  vi /etc/yum.repos.d/yum_local.repo
+[yum_local]
+name=yum_local
+baseurl=file:///packages/downloaded_rpms/
+enabled = 1
+gpgcheck = 0
+repo_gpgcheck = 0
+    4  cat /etc/yum.repos.d/yum_local.repo
+    5  yum repolist
+    6  yum install httpd --disablerepo=\* --enablerepo=yum_local   [this is imp command whn ua installing from a particular repo]
+    7  history
+
+*******************************************************************************************************
+
+TASK 29:
+
+LINUX CONFIGURE SUDO:
+
+We have some users on all app servers in Stratos Datacenter. Some of them have been assigned some new roles and responsibilities, therefore their users need to be upgraded with sudo access so that they can perform admin level tasks.
+
+a. Provide sudo access to user jim on all app servers.
+
+b. Make sure you have set up password-less sudo for the user.
+
+ANS
+	Login to all users and perform the following
+	1 su - jim
+      2 cat /etc/sudoers | grep jim
+      3 exit
+	4 visudo 
+	    jim ALL=(ALL) NOPASSWD:ALL
+	5 su - jim
+      6 sudo cat /etc/sudoers | grep jim
+      7 history 
+********************************************************************************************
+
+TASK 30:
+LINUX BASH SCRIPTS:
+The production support team of xFusionCorp Industries is working on developing some bash scripts to automate different day to day tasks. One is to create a bash script for taking websites backup. They have a static website running on App Server 2 in Stratos Datacenter, and they need to create a bash script named ecommerce_backup.sh which should accomplish the following tasks. (Also remember to place the script under /scripts directory on App Server 2)
+
+a. Create a zip archive named xfusioncorp_ecommerce.zip of /var/www/html/ecommerce directory.
+
+b. Save the archive in /backup/ on App Server 2. This is a temporary storage, as backups from this location will be clean on weekly basis. Therefore, we also need to save this backup archive on Nautilus Backup Server.
+
+c. Copy the created archive to Nautilus Backup Server server in /backup/ location.
+
+d. Please make sure script won't ask for password while copying the archive file. Additionally, the respective server user (for example, tony in case of App Server 1) must be able to run it.
+
+
+
+	ssh steve@stapp02
+	vi /scripts/ecommerce_backup.sh
+	zip -r /backup/xfusioncorp_ecommerce.zip /var/www/html/ecommerce
+	scp /backup/xfusioncorp_ecommerce.zip clint@stbkp01:/backup
+
+	cat  /scripts/ecommerce_backup.sh
+	ssh-keygen
+	ssh-copy-id clint@stbkp01
+	ssh clint@stbkp01
+	logout
+	sh ecommerce_backup.sh
+	ll /backup
+	ssh clint@stbkp01
+	ll /backup
+
+************************************************************************************
+TASK 31:
+LINUX LOGRATE:
+
+The Nautilus DevOps team is ready to launch a new application, which they will deploy on app servers in Stratos Datacenter. They are expecting significant traffic/usage of squid on app servers after that. This will generate massive logs, creating huge log files. To utilise the storage efficiently, they need to compress the log files and need to rotate old logs. Check the requirements shared below:
+
+a. In all app servers install squid package.
+
+b. Using logrotate configure squid logs rotation to monthly and keep only 3 rotated logs.
+
+(If by default log rotation is set, then please update configuration as needed)
+
+    2  yum install squid -y
+    3  cd /etc/logrotate.d/
+    4  ll
+    5  cat squid
+    6  vi squid
+	(change as per requirement)
+    7  systemctl start squid
+    8  systemctl status squid
+    9  history
+Repeat these in all servers
+
+**********************************************************************************
+
+TASK 32:
+Add Response Headers in Apache
+
+We are working on hardening Apache web server on all app servers. As a part of this process we want to add some of the Apache response headers for security purpose. We are testing the settings one by one on all app servers. As per details mentioned below enable these headers for Apache:
+
+Install httpd package on App Server 3 using yum and configure it to run on 3000 port, make sure to start its service.
+
+Create an index.html file under Apache's default document root i.e /var/www/html and add below given content in it.
+
+Welcome to the xFusionCorp Industries!
+
+Configure Apache to enable below mentioned headers:
+
+X-XSS-Protection header with value 1; mode=block
+
+X-Frame-Options header with value SAMEORIGIN
+
+X-Content-Type-Options header with value nosniff
+
+Note: You can test using curl on the given app server as LBR URL will not work for this task.
+
+
+
+  1  clear
+    2  rpm -qa |grep httpd
+    3  yum install httpd -y
+    4  rpm -qa |grep httpd
+    5  cat /etc/httpd/conf/httpd.conf |grep Listen
+    6  vi /etc/httpd/conf/httpd.conf
+	Header set X-XSS-Protection "1; mode=block"
+	Header always append X-Frame-Options SAMEORIGIN
+	Header set X-Content-Type-Options nosniff
+    7  cat /etc/httpd/conf/httpd.conf |grep X
+    8  cat /etc/httpd/conf/httpd.conf |grep Listen
+    9  systemctl start httpd
+   10  systemctl status httpd
+   11  ll //var/www/html/
+   12  vi /var/www/html/index.html
+	Welcome to the xFusionCorp Industries!
+   13  cat /var/www/html/index.html
+   14  curl http://stapp03:3000
+   15  curl -i http://stapp03:3000
+   16  history
+
+**********************************************************************************************************
+TASK 33:
+
+Linux Postfix Mail Server
+
+xFusionCorp Industries has planned to set up a common email server in Stork DC. After several meetings and recommendations they have decided to use postfix as their mail transfer agent and dovecot as an IMAP/POP3 server. We would like you to perform the following steps:
+Install and configure postfix on Stork DC mail server.
+
+Create an email account ravi@stratos.xfusioncorp.com identified by B4zNgHA7Ya.
+
+Set its mail directory to /home/ravi/Maildir.
+
+Install and configure dovecot on the same server.
+
+
+myhostname = stmail01.stratos.xfusioncorp.com
+mydomain = stratos.xfusioncorp.com
+myorigin = $mydomain
+inet_interfaces = all
+#inet_interfaces = localhost [comment it by giving #]
+#mydestination = $myhostname, localhost.$mydomain, localhost
+mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
+mynetworks = 172.16.238.0/24, 127.0.0.0/8
+home_mailbox = Maildir/
+
+  rpm -qa | grep postfix
+    6  rpm -qa | grep dovecot
+    7  yum install postfix -y
+    8  clear
+    9  vi /etc/postfix/main.cf
+   10  systemctl start postfix
+   11  systemctl status postfix
+	useradd ravi
+   18  passwd ravi
+change passwd as per requirement
+   19  cat /etc/passwd | grep ravi
+	telnet stmail01 25
+
+
+login to ravi[ravi@stmail01 Maildir]$ history
+    1  mailq
+    2  ll
+    3  cd Maildir/
+    4  ll
+    5  cat new/1689240148.V801Icaa79M742651.stmail01.stratos.xfusioncorp.com 
+    6  history
+
+protocols = imap pop3 lmtp submission
+
+   mail_location = maildir:~/Maildir
+disable_plaintext_auth = yes
+auth_mechanisms = plain login
+	 vi /etc/dovecot/dovecot.conf
+1  vi /etc/dovecot/conf.d/10-mail.conf 
+    2  vi /etc/dovecot/conf.d/10-auth.conf 
+    3  vi /etc/dovecot/conf.d/10-master.conf 
+ user = postfix
+     group = postfix
+
+	systemctl start dovecot
+	systemctl status dovecot
+	telnet stmail01 110
+user mark
+pass B4zNgHA7Ya
+retr 1
+
+quit
+
+	ss -tlunp
+
+exit
+*******************************************************************************************************
+
+TASK 34:
+Install and Configure Tomcat Server
+The Nautilus application development team recently finished the beta version of one of their Java-based applications, which they are planning to deploy on one of the app servers in Stratos DC. After an internal team meeting, they have decided to use the tomcat application server. Based on the requirements mentioned below complete the task:
+a. Install tomcat server on App Server 2 using yum.
+b. Configure it to run on port 6300.
+c. There is a ROOT.war file on Jump host at location /tmp. Deploy it on this tomcat server and make sure the webpage works directly on base URL i.e without specifying any sub-directory anything like this http://URL/ROOT .
+
+
+
+thor@jump_host /tmp$ history
+    1  cd /tmp
+    2  ls -la
+    3  scp ROOT.war steve@stapp02:/tmp
+    4  history
+
+[root@stapp02 tmp]# history
+    1  yum install tomcat -y
+    2  clear
+    3  cd /etc/tomcat/
+    4  ls
+    5  vi server.xml 
+	change port to 6300
+    6  cd /tmp
+    7  ls -la
+    8  mv ROOT.war /var/lib/tomcat/webapps/
+    9  systemctl restart tomcat
+   10  systemctl status tomcat
+   11  history
+
+***********************************************************************************************
+
+TASK 35:
+
+
+
